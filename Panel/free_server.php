@@ -1,38 +1,45 @@
 <?php 
 
-    include('includes/header.php'); 
+    include('includes/header.php');
     include('includes/function.php');
-	include('language/language.php');  
-    include('includes/jdf.php'); 
+	include('language/language.php');
+    include('includes/jdf.php');
+
+	// سرورهای هوش مصنوعی: ستون را در صورت نبودن اضافه کن (ایمن روی دیتابیس زنده)
+	ensureColumn('configs', 'is_ai', "varchar(11) NOT NULL DEFAULT 'false'");
+	// تب نمایش: همه سرورها یا فقط سرورهای هوش مصنوعی
+	$view = (isset($_GET['view']) && $_GET['view'] == 'ai') ? 'ai' : 'all';
+	$ai_filter = ($view == 'ai') ? " AND configs.is_ai = 'true' " : "";
 
 	if(isset($_POST['server_search'])) {
-		$user_qry="SELECT * FROM configs WHERE configs.`name` like '%".addslashes($_POST['search_value'])."%' or configs.link like '%".addslashes($_POST['search_value'])."%' ORDER BY configs.id DESC";  
-							 
+		$user_qry="SELECT * FROM configs WHERE configs.`name` like '%".addslashes($_POST['search_value'])."%' or configs.link like '%".addslashes($_POST['search_value'])."%' ORDER BY configs.id DESC";
+
 		$users_result=mysqli_query($mysqli,$user_qry);
 	 } else {
-	 
-		$tableName="configs";		
-		$targetpage = "free_server.php"; 	
-		$limit = 100; 
-		
-		$query = "SELECT COUNT(*) as num FROM $tableName WHERE $tableName.permium ='Free' AND $tableName.agent NOT LIKE '%|%' ORDER BY `$tableName`.`id`";
+
+		$tableName="configs";
+		$targetpage = ($view == 'ai') ? "free_server.php?view=ai" : "free_server.php";
+		$limit = 100;
+
+		$query = "SELECT COUNT(*) as num FROM $tableName WHERE $tableName.permium ='Free' AND $tableName.agent NOT LIKE '%|%' $ai_filter ORDER BY `$tableName`.`id`";
 		$total_pages = mysqli_fetch_array(mysqli_query($mysqli,$query));
 		$total_pages = $total_pages['num'];
-		
+
 		$stages = 3;
 		$page=0;
 		if(isset($_GET['page'])){
 		$page = mysqli_real_escape_string($mysqli,$_GET['page']);
 		}
 		if($page){
-			$start = ($page - 1) * $limit; 
+			$start = ($page - 1) * $limit;
 		}else{
-			$start = 0;	
-		}	
-			
-		$users_qry="SELECT * FROM $tableName WHERE $tableName.permium ='Free' AND $tableName.agent NOT LIKE '%|%' ORDER BY `$tableName`.`id` DESC LIMIT $start, $limit";  
+			$start = 0;
+		}
+
+		// گروه‌بندی کشوری: اول بر اساس لوکیشن، سپس جدیدترین
+		$users_qry="SELECT * FROM $tableName WHERE $tableName.permium ='Free' AND $tableName.agent NOT LIKE '%|%' $ai_filter ORDER BY `$tableName`.`locations_fa` ASC, `$tableName`.`id` DESC LIMIT $start, $limit";
 		$users_result=mysqli_query($mysqli,$users_qry);
-							
+
 	 }
 	if(isset($_GET['server_id'])){
 		  
@@ -187,6 +194,12 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
+                <div class="col-md-12" style="margin:12px 0;">
+                    <div class="btn-group" role="group">
+                        <a href="free_server.php" class="btn <?php echo ($view != 'ai') ? 'btn-primary' : 'btn-default'; ?>">همه سرورها</a>
+                        <a href="free_server.php?view=ai" class="btn <?php echo ($view == 'ai') ? 'btn-primary' : 'btn-default'; ?>"><i class="fa fa-magic" aria-hidden="true"></i> سرورهای هوش مصنوعی</a>
+                    </div>
+                </div>
                 <div class="row mrg-top">
                     <div class="col-md-12">
                         <div class="col-md-12 col-sm-12">
@@ -204,27 +217,53 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>                                <th class="cat_action_list text-center">گزینه ها</th>                              
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                                <th class="text-center">ردیف</th>
+                                <th class="cat_action_list text-center">گزینه ها</th>
 
-                                <th class="text-center">نام سرور فارسی</th>                         
-                                <th class="text-center">نام سرور لاتین</th>                         
+                                <th class="text-center">نام سرور فارسی</th>
+                                <th class="text-center">نام سرور لاتین</th>
                                 <th class="text-center">کانفیگ</th>
                                 <th class="text-center">حجم مصرفی</th>
                                 <th class="text-center">لوکیشن فارسی</th>
                                 <th class="text-center">لوکیشن لاتین</th>
-                                <th class="text-center">تاریخ ساخت</th>                
+                                <th class="text-center">هوش مصنوعی</th>
+                                <th class="text-center">تاریخ ساخت</th>
                                 <th class="text-center">فرگمنت</th>
-                                <th class="text-center">وضعیت</th>    
+                                <th class="text-center">وضعیت</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
+                                if (isset($_SERVER['HTTPS'])) {
+                                    $file_path = 'https://'.$_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']).'/images/Flag/';
+                                } else {
+                                    $file_path = 'http://'.$_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']).'/images/Flag/';
+                                }
                                 $i=1;
+                                $current_country = null; // برای تشخیص تغییر گروه کشوری
+                                $group_counter   = 0;    // شماره‌گذاری خودکار درون هر کشور
                                 while($users_row=mysqli_fetch_array($users_result))
-                                {     
+                                {
+                                    // سرصفحه‌ی گروه کشوری
+                                    if ($current_country !== $users_row['locations_fa']) {
+                                        $current_country = $users_row['locations_fa'];
+                                        $group_counter = 0;
+                                ?>
+                                        <tr class="country-group">
+                                            <td colspan="13" style="background:linear-gradient(134deg,#132056,#2f92a98a);color:#fff;font-weight:bold;">
+                                                <img src="<?php echo $file_path . $users_row['src']; ?>" style="width:50px;height:32px;vertical-align:middle;margin-left:8px;">
+                                                <?php echo $users_row['locations_fa']; ?>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                    $group_counter++;
                             ?>
                             <tr>
-                                <td><input type="checkbox" name="selected_users[]" value="<?php echo $users_row['id']; ?>" class="user-checkbox"></td>                                <td class="text-center">
+                                <td><input type="checkbox" name="selected_users[]" value="<?php echo $users_row['id']; ?>" class="user-checkbox"></td>
+                                <td class="text-center"><?php echo $group_counter; ?></td>
+                                <td class="text-center">
                                     <a href="free_server.php?reset_size_id=<?php echo $users_row['id']; ?>" class="btn btn-success btn_edit" onclick="return confirm('آیا مطمئن هستید که حجم این سرور ریست شود؟')">ریست حجم</a>
                                     <a href="add_server_free.php?server_id=<?php echo $users_row['id'];?>" data-toggle="tooltip" title="ویرایش" class="btn btn-primary btn_edit"><i class="fa fa-edit"></i></a>
                                     <a href="free_server.php?server_id=<?php echo $users_row['id'];?>" data-toggle="tooltip" title="حذف" class="btn btn-danger btn_delete" onclick="return confirm('آیا میخواهید این سرور را حذف نمایید؟')"><i class="fa fa-trash"></i></a>
@@ -243,7 +282,14 @@
                                 ?>
                                 </td>
                                 <td class="text-center"><?php echo $users_row['locations_fa'];?></td>                        
-                                <td class="text-center"><?php echo $users_row['locations_en'];?></td>                        
+                                <td class="text-center"><?php echo $users_row['locations_en'];?></td>
+                                <td class="text-center">
+                                    <?php if(isset($users_row['is_ai']) && $users_row['is_ai']=="true"){?>
+                                        <span class="badge badge-success badge-icon"><i class="fa fa-magic" aria-hidden="true"></i><span>هوش مصنوعی</span></span>
+                                    <?php }else{?>
+                                        <span class="badge badge-default">عادی</span>
+                                    <?php }?>
+                                </td>
                                 <td class="text-center"><?php echo jdate("Y-m-d", strtotime($users_row['date'])); ?></td>
                                 <td class="text-center">
                                     <?php if($users_row['fragment']!="false"){?>

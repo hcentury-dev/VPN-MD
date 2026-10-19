@@ -124,6 +124,7 @@ CREATE TABLE `configs` (
   `agent` varchar(1000) NOT NULL DEFAULT 'ADMIN',
   `oprator` varchar(11) NOT NULL DEFAULT 'ALL',
   `status` varchar(11) NOT NULL DEFAULT 'true',
+  `is_ai` varchar(11) NOT NULL DEFAULT 'false',
   `date` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 

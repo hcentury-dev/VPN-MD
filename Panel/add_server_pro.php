@@ -2,8 +2,11 @@
 
     include('includes/header.php');
     include('includes/function.php');
-	include('language/language.php'); 
-	include('includes/jdf.php'); 
+	include('language/language.php');
+	include('includes/jdf.php');
+
+	// سرورهای هوش مصنوعی: افزودن ستون در صورت نبودن (ایمن روی دیتابیس زنده)
+	ensureColumn('configs', 'is_ai', "varchar(11) NOT NULL DEFAULT 'false'");
 
 	$Time = date('Y-m-d H:i:s');
   
@@ -102,6 +105,7 @@
 			'permium'   =>  'Pro',
 			'oprator'   =>  'ALL',
 			'json'      =>  $is_json,
+			'is_ai'     =>  (isset($_POST['is_ai']) && $_POST['is_ai'] == 'true') ? 'true' : 'false',
 			'date'      =>  $Time
 			);
 
@@ -140,8 +144,9 @@
 			'json'      =>  $is_json,
 			'permium'   =>  'Pro',
 			'oprator'   =>  'ALL',
+			'is_ai'     =>  (isset($_POST['is_ai']) && $_POST['is_ai'] == 'true') ? 'true' : 'false',
 			);
-		
+
 		   $server_edit=Update('configs', $data, "WHERE id = '".$_POST['server_id']."'");
 		 
 			if ($server_edit > 0){
@@ -260,6 +265,15 @@
                         <select name="op_fragment" id="op_fragment" class="select2">
                           <option value="true" <?php if($user_row['fragment']=='true'){?>selected<?php }?>>فعال</option>
                           <option value="false" <?php if($user_row['fragment']=='false'){?>selected<?php }?>>غیرفعال</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="ai_field">
+                    <label class="col-md-3 control-label">سرور هوش مصنوعی</label>
+                    <div class="col-md-6">
+                        <select name="is_ai" id="is_ai" class="select2">
+                          <option value="false" <?php if(!isset($user_row['is_ai']) || $user_row['is_ai']!='true'){?>selected<?php }?>>غیرفعال</option>
+                          <option value="true" <?php if(isset($user_row['is_ai']) && $user_row['is_ai']=='true'){?>selected<?php }?>>فعال</option>
                         </select>
                     </div>
                 </div>

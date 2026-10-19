@@ -179,9 +179,25 @@ function Delete($table_name, $where_clause='')
     }
     // build the query
     $sql = "DELETE FROM ".$table_name.$whereSQL;
-     
+
     // run and return the query result resource
     return mysqli_query($mysqli,$sql);
+}
+
+// Ensure a column exists on a table (idempotent, safe to call on a live DB).
+// $table/$column are sanitised; $definition is trusted (hard-coded by callers).
+function ensureColumn($table, $column, $definition)
+{
+    global $mysqli;
+    $table  = preg_replace('/[^A-Za-z0-9_]/', '', $table);
+    $column = preg_replace('/[^A-Za-z0-9_]/', '', $column);
+    if ($table === '' || $column === '') { return false; }
+
+    $res = mysqli_query($mysqli, "SHOW COLUMNS FROM `$table` LIKE '".$mysqli->real_escape_string($column)."'");
+    if ($res && mysqli_num_rows($res) === 0) {
+        return mysqli_query($mysqli, "ALTER TABLE `$table` ADD `$column` ".$definition);
+    }
+    return true; // already present (or table unavailable)
 }
 
 //Delete Data, the where clause is left optional incase the user wants to delete every row!
