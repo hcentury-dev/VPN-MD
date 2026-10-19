@@ -1,3 +1,22 @@
-
 # FVM Version Cache
 .fvm/
+
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+*.g.dart.lock
+
+# Android related
+**/android/local.properties
+**/android/.gradle/
+**/android/captures/
+*.jks
+*.keystore
+
+# Misc
+*.log
+.DS_Store
