@@ -321,6 +321,8 @@ CREATE TABLE `settings` (
   `app_logo` varchar(255) NOT NULL,
   `telegram_token` varchar(255) NOT NULL DEFAULT '0',
   `telegram_id` varchar(255) NOT NULL DEFAULT '0',
+  `sales_bot_token` varchar(255) NOT NULL DEFAULT '0',
+  `tg_relay_secret` varchar(255) NOT NULL DEFAULT '',
   `app_developed_by` varchar(255) NOT NULL,
   `app_guest_volume` varchar(11) NOT NULL DEFAULT '10',
   `api_guest_day` varchar(11) NOT NULL DEFAULT '30',

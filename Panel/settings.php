@@ -9,6 +9,9 @@ require("language/language.php");
 include("includes/connection.php");
 include("includes/session_check.php");        
 include('includes/jdf.php');
+
+ensureColumn('settings', 'sales_bot_token', "varchar(255) NOT NULL DEFAULT '0'");
+ensureColumn('settings', 'tg_relay_secret', "varchar(255) NOT NULL DEFAULT ''");
 date_default_timezone_set('Asia/Tehran');
 
 $admin_username = "";
@@ -65,7 +68,8 @@ if(isset($_POST['check_telegram_api'])){
         $url = $link_get;
         $postData = [
             'action' => 'getMe',
-            'telegram_token' => $token
+            'telegram_token' => $token,
+            'relay_secret' => isset($settings_row['tg_relay_secret']) ? $settings_row['tg_relay_secret'] : ''
         ];
     } else {
         // اگر سرور خارج از ایران است، مستقیم به تلگرام وصل شو
@@ -119,7 +123,8 @@ if(isset($_POST['check_telegram_user'])){
     $postData = [
         'action' => 'getChat',
         'telegram_token' => $token,
-        'telegram_id' => $user_id // شناسه کاربر برای ارسال به سرور
+        'telegram_id' => $user_id, // شناسه کاربر برای ارسال به سرور
+        'relay_secret' => isset($settings_row['tg_relay_secret']) ? $settings_row['tg_relay_secret'] : ''
     ];
     
     $ch = curl_init();
@@ -472,7 +477,8 @@ if (isset($_POST['fetch_database_output'])) {
             'file' => new CURLFile(realpath($filePath)),
             'telegram_token' => $telegram_token,
             'telegram_id' => $telegram_id,
-            'caption' => $caption
+            'caption' => $caption,
+            'relay_secret' => isset($settings_row['tg_relay_secret']) ? $settings_row['tg_relay_secret'] : ''
         ];
 
         $ch = curl_init($settings_row['link_get']);
@@ -592,6 +598,8 @@ if(isset($_POST['submit'])){
           'manager_total'    =>  $_POST['manager_total'],  
           'telegram_id'    =>  $_POST['telegram_id'],                
           'link_get'    =>  $_POST['link_get'],  
+          'tg_relay_secret' => isset($_POST['tg_relay_secret']) ? $_POST['tg_relay_secret'] : '',
+          'sales_bot_token' => isset($_POST['sales_bot_token']) ? $_POST['sales_bot_token'] : '0',
           'backup_interval'=>  $_POST['backup_interval'],
           );
     }
@@ -607,6 +615,8 @@ if(isset($_POST['submit'])){
           'manager_total'    =>  $_POST['manager_total'],  
           'telegram_id'    =>  $_POST['telegram_id'],                
           'link_get'    =>  $_POST['link_get'],  
+          'tg_relay_secret' => isset($_POST['tg_relay_secret']) ? $_POST['tg_relay_secret'] : '',
+          'sales_bot_token' => isset($_POST['sales_bot_token']) ? $_POST['sales_bot_token'] : '0',
           'backup_interval'=>  $_POST['backup_interval'],
       );
     }
@@ -731,6 +741,18 @@ if(isset($_POST['channel_submit'])){
                         <div id="bot_info" class="info-box"></div>
                     </div>
                 </div>
+              <div class="form-group">
+                    <label class="col-md-3 control-label">توکن ربات فروش:</label>
+                    <div class="col-md-6">
+                        <input type="text" name="sales_bot_token" value="<?php echo isset($settings_row['sales_bot_token']) ? $settings_row['sales_bot_token'] : ''; ?>" style="direction: ltr;" class="form-control" placeholder="توکن ربات فروش (غیر از ربات اعلان)">
+                    </div>
+              </div>
+              <div class="form-group">
+                    <label class="col-md-3 control-label">سکرت سرور واسط:</label>
+                    <div class="col-md-6">
+                        <input type="text" name="tg_relay_secret" value="<?php echo isset($settings_row['tg_relay_secret']) ? $settings_row['tg_relay_secret'] : ''; ?>" style="direction: ltr;" class="form-control" placeholder="اختیاری — همان سکرت فایل رله">
+                    </div>
+              </div>
               <div class="form-group">
                     <label class="col-md-3 control-label">شناسه کاربر تلگرام:</label>
                     <div class="col-md-6">

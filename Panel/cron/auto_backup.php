@@ -125,7 +125,8 @@ try {
             'file' => new CURLFile(realpath($filePath)),
             'telegram_token' => $telegram_token,
             'telegram_id' => $telegram_id,
-            'caption' => $caption
+            'caption' => $caption,
+            'relay_secret' => getSetting($mysqli, 'tg_relay_secret')
         ];
         
         $ch = curl_init($link_get);
