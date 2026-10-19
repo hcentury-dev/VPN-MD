@@ -24,6 +24,7 @@ import 'controller/language/language_controller.dart';
 import 'global.dart';
 import 'helpers/pref.dart';
 import 'screens/splash.dart';
+import 'themes/themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -270,7 +271,9 @@ class MyApp extends StatelessWidget {
               ? TextDirection.ltr
               : TextDirection.rtl,
           home: isLoginSafe ? const SplashScreen() : const LoginPage(),
-          theme: ThemeData(fontFamily: 'sans'),
+          theme: lightThemeData,
+          darkTheme: darkThemeData,
+          themeMode: Pref.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           builder: (context, child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(

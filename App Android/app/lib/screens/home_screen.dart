@@ -1396,6 +1396,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
                     const Divider(color: Colors.white10, height: 24),
 
+                    // ── Live light/dark theme switch ──
+                    _drawerItem(
+                        languageController.selectedLanguage == 'en_US'
+                            ? (Pref.isDarkMode ? 'Light mode' : 'Dark mode')
+                            : (Pref.isDarkMode ? 'حالت روشن' : 'حالت تاریک'),
+                        languageController.selectedLanguage == 'en_US'
+                            ? 'Switch app theme'
+                            : 'تغییر پوستهٔ برنامه',
+                        Pref.isDarkMode
+                            ? Icons.light_mode_rounded
+                            : Icons.dark_mode_rounded, () {
+                      final next = !Pref.isDarkMode;
+                      Pref.isDarkMode = next;
+                      Get.changeThemeMode(
+                          next ? ThemeMode.dark : ThemeMode.light);
+                      setState(() {});
+                    }),
+
                     _drawerItem(
                         LanguageConstants.home39.tr,
                         LanguageConstants.home40.tr,
