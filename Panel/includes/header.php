@@ -80,11 +80,17 @@
                 }
             </style>
         
-            <li class="special-item <?php if($currentFile == $file_path) { echo 'active'; } ?>"> 
+            <li class="special-item <?php if($currentFile == $file_path) { echo 'active'; } ?>">
                 <a href="<?php echo $file_path; ?>" target="_blank">
                     <div class="icon"> <i class="fa fa-link" aria-hidden="true"></i> </div>
                     <div class="title">ورود به پنل همکاران <span></span></div>
-                </a> 
+                </a>
+            </li>
+            <li class="special-item">
+                <a href="/manager/" target="_blank">
+                    <div class="icon"> <i class="fa fa-flask" aria-hidden="true"></i> </div>
+                    <div class="title">ورود تستی پنل همکار <span></span></div>
+                </a>
             </li>
             <li class="special-item <?php if($currentFile=="manager.php"){echo "active";} ?>"> 
                 <a href="manager.php">
