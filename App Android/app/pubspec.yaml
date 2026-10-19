@@ -1,0 +1,96 @@
+name: vpn
+description: "vpn"
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ">=3.3.3 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  connectivity_plus:
+  logger:
+  flutter_easyloading:
+  firebase_core:
+  firebase_messaging:
+  get_storage:
+  cupertino_icons:
+  installed_apps: ^1.6.0
+  flutter_svg:
+  http:
+  hive:
+  hive_flutter:
+  url_launcher:
+  simple_animations:
+  cherry_toast: 1.8.0
+  lottie:
+  cached_network_image:
+  persian_number_utility:
+  provider:
+  permission_handler: ^12.0.1
+  cross_connectivity:
+  flutter_screenutil:
+  snapping_sheet:
+  get:
+  device_info_plus:
+  #  platform_device_id:
+  device_info_plus_tizen:
+  carousel_slider:
+  badges:
+  wave:
+  loading_animation_widget:
+  path_provider:
+  ipwhois:
+  windows_single_instance:
+  #  video_player: 2.9.5
+  window_manager:
+  socks5_proxy: ^1.0.5+dev.1
+  flutter_riverpod:
+  tray_manager:
+  dotted_border:
+  fluentui_system_icons:
+  encrypt:
+  crypto:
+  pointycastle:
+  avatar_glow:
+  shared_preferences:
+  showcaseview:
+  collection:
+  #  disable_battery_optimization: ^1.1.1
+
+  flutter_v2ray_client:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.9
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/lottie/
+    - assets/images/
+
+  fonts:
+    - family: sans
+      fonts:
+        - asset: assets/fonts/bold.ttf
+          weight: 700
+    - family: Merriweather
+      fonts:
+        - asset: assets/fonts/Merriweather-Regular.ttf
+        - asset: assets/fonts/Merriweather-Bold.ttf
+          weight: 700
+    - family: NotoSerif
+      fonts:
+        - asset: assets/fonts/NotoSerif-Regular.ttf
+        - asset: assets/fonts/NotoSerif-Bold.ttf
+          weight: 700

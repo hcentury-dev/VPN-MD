@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "975883764507",
+    "project_id": "vnapps-0012",
+    "storage_bucket": "vnapps-0012.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975883764507:android:69b03a9735edf51467c9be",
+        "android_client_info": {
+          "package_name": "com.md.alpping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATTCL8d7Lb_Q23TbFF_ajXJoZYuCheU5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975883764507:android:f798d65a4699e96567c9be",
+        "android_client_info": {
+          "package_name": "com.md.blueApps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATTCL8d7Lb_Q23TbFF_ajXJoZYuCheU5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975883764507:android:5079d6cfa99685c567c9be",
+        "android_client_info": {
+          "package_name": "com.md.starvpn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATTCL8d7Lb_Q23TbFF_ajXJoZYuCheU5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975883764507:android:59acda1e5f7031a467c9be",
+        "android_client_info": {
+          "package_name": "com.md.teamvpn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATTCL8d7Lb_Q23TbFF_ajXJoZYuCheU5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975883764507:android:503a423a7c40d80567c9be",
+        "android_client_info": {
+          "package_name": "com.md.alpping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATTCL8d7Lb_Q23TbFF_ajXJoZYuCheU5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

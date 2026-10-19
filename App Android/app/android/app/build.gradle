@@ -1,0 +1,86 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+android {
+    namespace "com.md.alpping"
+    compileSdk 36
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        applicationId "com.md.alpping"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../../keyWiz.jks")
+            storePassword "123789"
+            keyAlias "keyWiz"
+            keyPassword "123789"
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a", "arm64-v8a", "x86_64"
+            universalApk true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+            ndk {
+                abiFilters "x86_64", "armeabi-v7a", "arm64-v8a"
+                debugSymbolLevel 'FULL'
+            }
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+}

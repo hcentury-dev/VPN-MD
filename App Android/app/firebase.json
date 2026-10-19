@@ -1,0 +1,21 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "vnapps-0012",
+          "appId": "1:975883764507:android:503a423a7c40d80567c9be",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "vnapps-0012",
+          "configurations": {
+            "android": "1:975883764507:android:503a423a7c40d80567c9be"
+          }
+        }
+      }
+    }
+  }
+}
