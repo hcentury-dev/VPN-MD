@@ -61,8 +61,26 @@ String get questionsUrl => RemoteConfig.questionsUrl;
 String get alwaysNotificationUrl => RemoteConfig.alwaysNotificationUrl;
 final storage = GetStorage();
 
-/// ---------------- CONSTANTS ----------------
+/// ============================================================
+/// SERVER CONNECTION POINTS  —  نقاط اتصال به سرور (همه از همین‌جا)
+/// هر چیزی که اپ برای رسیدن به بک‌اند لازم دارد، فقط در همین بلوک است.
+/// جزئیات و نحوهٔ مچ‌شدن با سمت سرور در فایل SERVER_SETUP.md.
+/// ============================================================
+
+/// کلید AES-256-CBC. باید دقیقاً برابرِ $key در API/postN.php باشد.
+/// سرور:  openssl_encrypt(data,"AES-256-CBC", key, OPENSSL_RAW_DATA, iv)  →  base64(iv + data)
+/// اپ:    CryptoService.decryptConfig()  همین را برعکس می‌کند.
 String key = '3154b04f1932a28423f1e86bf94657886e99b057b19b79193051e067148fa536';
+
+/// منبع کانفیگِ بوت‌استرپ (db.json). اپ از آن `address:[{post,server,user,version,timeData}]`
+/// را می‌خواند. به ترتیب امتحان می‌شوند؛ اولین آدرسی که `address` معتبر بدهد برنده است
+/// (مقاوم در برابر فیلتر/قطعی دامنه). آدرس اصلی باید نسخهٔ raw باشد، نه صفحهٔ edit گیت‌هاب.
+const List<String> configBootstrapUrls = [
+  'https://raw.githubusercontent.com/hcentury-dev/Alpha/main/db.json',
+  'https://fere34e2we.alpping.ir/w4reizwiz.json', // دامنهٔ جایگزین (fallback)
+];
+
+/// هویت اپ
 const String nameAppFa = "alpping";
 const String nameAppEn = "alpping";
 var packageName = "com.md.alpping";

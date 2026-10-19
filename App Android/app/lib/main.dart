@@ -228,25 +228,26 @@ Future<void> _requestNotificationPermissionIfNeeded() async {
 
 Future<void> fetchData() async {
   final storage = GetStorage();
-  try {
-    final uri = Uri.parse('https://fere34e2we.alpping.ir/w4reizwiz.json');
-    final response = await http.get(uri).timeout(const Duration(seconds: 3));
-
-    if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      final address = decoded['address'];
-
-      if (address is List && address.isNotEmpty) {
-        storage.write('address', address);
-      } else {
-        storage.writeIfNull('address', []);
+  // آدرس‌ها از pref.dart (بخش SERVER CONNECTION POINTS) می‌آیند و به ترتیب امتحان
+  // می‌شوند؛ اولین منبعی که `address` معتبر بدهد ذخیره می‌شود. اگر همه قطع بودند،
+  // کانفیگِ قبلیِ ذخیره‌شده دست‌نخورده می‌ماند و اپ کرش نمی‌کند.
+  for (final url in configBootstrapUrls) {
+    try {
+      final response =
+          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 3));
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final address = decoded['address'];
+        if (address is List && address.isNotEmpty) {
+          storage.write('address', address);
+          return;
+        }
       }
-    } else {
-      storage.writeIfNull('address', []);
+    } catch (_) {
+      // به سراغ آدرس بعدی برو
     }
-  } catch (_) {
-    storage.writeIfNull('address', []);
   }
+  storage.writeIfNull('address', []);
 }
 
 class MyApp extends StatelessWidget {
