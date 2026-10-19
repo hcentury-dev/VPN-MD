@@ -1,8 +1,6 @@
 <?php
-// شروع session
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// شروع session (نام سشن اختصاصی پنل مدیر)
+require_once __DIR__ . '/includes/session_boot.php';
 
 include('includes/header.php');
 include('includes/function.php');

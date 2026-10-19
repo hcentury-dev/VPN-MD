@@ -52,19 +52,19 @@
     $shamsi_date = toPersianNumbers($shamsi_date);
     $remaining_time = toPersianNumbers($remaining_time);
     if (!isset($SES_row['status'])){
-        session_start();
+        require_once __DIR__ . '/session_boot.php';
         unset($_SESSION["name"]);
         header("Location:index.php");
         exit;
     } else if ($SES_row['status'] == 'deactive'){
-        session_start();
+        require_once __DIR__ . '/session_boot.php';
         unset($_SESSION["name"]);
         header("Location:index.php");
         exit;
     }
     else if ($SES_row['type'] == '0' && $date_now > $date_expire) {
    mysqli_query ($mysqli,"UPDATE `manager` SET `status` = 'expire' WHERE `manager`.`id` ='".$_SESSION['id']."'");
-        session_start();
+        require_once __DIR__ . '/session_boot.php';
         unset($_SESSION["name"]);
         header("Location:index.php");
         exit;
