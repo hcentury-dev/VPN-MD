@@ -48,6 +48,7 @@ import '../helpers/api_auth.dart';
 import '../controller/language/language_config.dart';
 import '../controller/language/language_controller.dart';
 import '../screens/setting_screen.dart';
+import 'chat_screen.dart';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const _kDeepBg = Color(0xFF050510);
@@ -1412,6 +1413,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       Get.changeThemeMode(
                           next ? ThemeMode.dark : ThemeMode.light);
                       setState(() {});
+                    }),
+
+                    _drawerItem(
+                        languageController.selectedLanguage == 'en_US'
+                            ? 'Live chat'
+                            : 'چت پشتیبانی',
+                        languageController.selectedLanguage == 'en_US'
+                            ? 'Chat with support'
+                            : 'گفتگوی زنده با پشتیبانی',
+                        Icons.chat_bubble_outline_rounded, () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const ChatScreen()));
                     }),
 
                     _drawerItem(

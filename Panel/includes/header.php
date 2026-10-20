@@ -193,10 +193,15 @@
           <div class="title">آپدیت اندروید</div>
           </a> 
         </li>
+        <li <?php if($currentFile=="chat.php"){?>class="active"<?php }?>> <a href="chat.php">
+          <div class="icon"> <i class="fa fa-comments-o" aria-hidden="true"></i> </div>
+          <div class="title">چت پشتیبانی</div>
+          </a>
+        </li>
         <li <?php if($currentFile=="settings.php"){?>class="active"<?php }?>> <a href="settings.php">
           <div class="icon"> <i class="fa fa-cog" aria-hidden="true"></i> </div>
           <div class="title">تنظیمات</div>
-          </a> 
+          </a>
         </li>
       </ul>
     </div>
