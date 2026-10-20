@@ -49,6 +49,7 @@ import '../controller/language/language_config.dart';
 import '../controller/language/language_controller.dart';
 import '../screens/setting_screen.dart';
 import 'chat_screen.dart';
+import 'permissions_guide.dart';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const _kDeepBg = Color(0xFF050510);
@@ -1426,6 +1427,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       Navigator.pop(context);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (_) => const ChatScreen()));
+                    }),
+
+                    _drawerItem(
+                        languageController.selectedLanguage == 'en_US'
+                            ? 'Permissions'
+                            : 'راهنمای مجوزها',
+                        languageController.selectedLanguage == 'en_US'
+                            ? 'Enable required permissions'
+                            : 'فعال‌کردن مجوزهای لازم',
+                        Icons.verified_user_outlined, () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const PermissionsGuide()));
                     }),
 
                     _drawerItem(
