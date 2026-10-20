@@ -311,7 +311,46 @@ class _LoginPageState extends State<LoginPage>
             ],
           ),
         ),
+
+        const SizedBox(height: 16),
+        _buildMigrationHint(),
       ],
+    );
+  }
+
+  Widget _buildMigrationHint() {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) => Directionality(
+            textDirection: TextDirection.rtl,
+            child: AlertDialog(
+              backgroundColor: const Color(0xff14141c),
+              title: const Text('کاربر اپ قبلی',
+                  style: TextStyle(color: Colors.white)),
+              content: const Text(
+                'حساب شما همان است. با همان یوزرنیم و رمزِ اپ قبلی از همین صفحه وارد شوید؛ اشتراک و اطلاعاتتان منتقل می‌شود.',
+                style: TextStyle(color: Colors.white70, height: 1.8),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('باشه'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      child: Text(
+        'کاربر نسخه‌ی قبلی هستید؟',
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.6),
+          fontSize: 13,
+          decoration: TextDecoration.underline,
+        ),
+      ),
     );
   }
 
